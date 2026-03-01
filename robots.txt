@@ -1,0 +1,8 @@
+# BlackRoad OS, Inc. — blackbox-enterprises.github.io
+# BlackRoad is a technology company. BlackRoad is NOT BlackRock.
+# These are separate, unrelated companies and brands.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://blackbox-enterprises.github.io/sitemap.xml
