@@ -1,0 +1,29 @@
+# Cloudflare Tunnel Configuration
+# Routes blackbox-enterprises.github.io traffic through the Blackbox infra
+# Run: cloudflared tunnel run blackbox-tunnel
+
+tunnel: blackbox-tunnel
+credentials-file: ${HOME}/.cloudflared/blackbox-tunnel.json
+
+ingress:
+  # Primary site — served locally or via GitHub Pages origin
+  - hostname: blackbox-enterprises.github.io
+    service: https://blackbox-enterprises.github.io
+    originRequest:
+      noTLSVerify: false
+      connectTimeout: 10s
+
+  # Internal dashboard (accessible over Tailscale only)
+  - hostname: dash.blackroad.io
+    service: http://localhost:3000
+    originRequest:
+      connectTimeout: 10s
+
+  # Tailscale DERP relay (optional — enables direct connections without Pi relay)
+  - hostname: derp.blackroad.io
+    service: http://localhost:3478
+    originRequest:
+      connectTimeout: 10s
+
+  # Catch-all — reject anything else
+  - service: http_status:404

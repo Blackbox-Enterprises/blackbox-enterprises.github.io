@@ -463,6 +463,16 @@
       border-radius: 16px;
       padding: 28px;
       transition: border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .infra-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
     }
 
     .infra-card:hover { border-color: rgba(255,255,255,0.18); }
@@ -470,6 +480,7 @@
     .infra-card-icon {
       font-size: 28px;
       margin-bottom: 14px;
+      display: block;
     }
 
     .infra-card-title {
@@ -500,6 +511,31 @@
       font-size: 12px;
       color: rgba(255,255,255,0.4);
       margin-top: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-top: 12px;
+    }
+
+    .status-active {
+      background: rgba(34,197,94,0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .status-pending {
+      background: rgba(234,179,8,0.12);
+      color: #eab308;
+      border: 1px solid rgba(234,179,8,0.25);
     }
 
     /* ── ROUTING SECTION ──────────────────────────────── */
@@ -561,6 +597,7 @@
       .stats { flex-direction: column; }
       .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
       .routing-flow { padding: 20px; }
+      .infra-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -576,7 +613,7 @@
       <div class="hero-icon">⚙️</div>
       <h1>Blackbox Enterprises</h1>
       <p class="tagline">Automate Everything.</p>
-      <p class="description">Self-hosted on BlackRoad OS — n8n, Airbyte, Prefect, Temporal — routed through Cloudflare + Tailscale with zero-trust OAuth. No OpenAI, no Anthropic, no third-party APIs unless you choose them.</p>
+      <p class="description">Self-hosted on BlackRoad OS — n8n, Airbyte, Prefect, Temporal — routed through Cloudflare + Tailscale with zero-trust OAuth. All traffic terminates on your Pis. No third-party AI providers in the path.</p>
       <div class="hero-actions">
         <a href="https://github.com/Blackbox-Enterprises" class="btn btn-primary">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -598,7 +635,7 @@
 
   <section class="tags-section">
     <div class="tags-wrap">
-      <span class="tag">Workflow Automation</span><span class="tag">ETL</span><span class="tag">Orchestration</span><span class="tag">No-Code</span><span class="tag">Self-Hosted</span><span class="tag">Zero-Trust</span>
+      <span class="tag">Workflow Automation</span><span class="tag">ETL</span><span class="tag">Orchestration</span><span class="tag">No-Code</span><span class="tag">Self-Hosted</span><span class="tag">Zero-Trust</span><span class="tag">Cloudflare</span><span class="tag">Tailscale</span>
     </div>
   </section>
 
@@ -641,7 +678,7 @@
     </div>
 
     <p class="routing-note">
-      <strong>OAuth solved via Cloudflare Access</strong> — zero-trust identity layer in front of every service. No OpenAI, no Anthropic dependency required. Your apps authenticate against your own Cloudflare Access policy (supports GitHub SSO, email OTP, or your own IdP). Tailscale handles node-to-node routing within the fleet — no inbound exposure on the Pis without an explicit tunnel.
+      <strong>OAuth solved via Cloudflare Access</strong> — zero-trust identity layer in front of every service. Your apps authenticate against your own Cloudflare Access policy (supports GitHub SSO, email OTP, or your own IdP). Tailscale handles node-to-node routing within the fleet — no inbound exposure on the Pis without an explicit tunnel.
     </p>
   </section>
 
@@ -649,7 +686,7 @@
   <section class="infra-section">
     <div class="section-label">Self-Hosted Stack</div>
     <h2 class="section-title">Your Infrastructure, Your Rules</h2>
-    <p class="section-sub">The BlackRoad fleet runs entirely on hardware you control, with authentication and routing you configure.</p>
+    <p class="section-sub">The BlackRoad fleet runs entirely on hardware you control, with authentication and routing you configure. No third-party AI providers in the data path.</p>
 
     <div class="infra-grid">
       <div class="infra-card">
@@ -666,9 +703,9 @@
         <div class="infra-card-icon">🔐</div>
         <div class="infra-card-title">Cloudflare Access (OAuth)</div>
         <div class="infra-card-body">
-          Zero-trust auth layer. Protects every service URL with identity policies — replaces third-party OAuth providers. Supports GitHub SSO, email OTP, or SAML.
+          Zero-trust auth layer. Protects every service URL with identity policies — only @blackboxprogramming allowed. Supports GitHub SSO, email OTP, or SAML.
         </div>
-        <div class="status-line"><span class="status-dot green"></span>OAuth / SSO self-hosted</div>
+        <span class="status-pill status-active"><span class="status-dot"></span>Active</span>
       </div>
 
       <div class="infra-card">
@@ -703,7 +740,7 @@
         <div class="infra-card-icon">🤖</div>
         <div class="infra-card-title">Local LLM (Ollama)</div>
         <div class="infra-card-body">
-          Replace OpenAI / Anthropic with Ollama running on your fleet. Models: <code>llama3</code>, <code>mistral</code>, <code>codestral</code>. Zero outbound API calls.
+          Run your own models on the fleet. Models: <code>llama3</code>, <code>mistral</code>, <code>codestral</code>. Zero outbound API calls to any third-party provider.
         </div>
         <div class="status-line"><span class="status-dot green"></span>No third-party API required</div>
       </div>
