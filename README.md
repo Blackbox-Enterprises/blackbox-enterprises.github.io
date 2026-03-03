@@ -12,7 +12,7 @@ Client → Cloudflare Edge/WAF → Cloudflare Access (OAuth) → Cloudflare Tunn
 
 ### OAuth — Solved via Cloudflare Access
 
-No OpenAI, Anthropic, or third-party auth providers required.
+No third-party auth providers required.
 
 - **Cloudflare Access** acts as the zero-trust identity layer in front of every service URL.
 - Supports GitHub SSO, email OTP, or any SAML/OIDC IdP you control.
@@ -31,9 +31,9 @@ No OpenAI, Anthropic, or third-party auth providers required.
 - Run: `cloudflared tunnel run blackroad`
 - Outbound-only — the Pis call out to Cloudflare, not the other way around.
 
-### Local LLM — Replace OpenAI / Anthropic
+### Local LLM — Self-Hosted Models Only
 
-Run [Ollama](https://ollama.com) on the fleet to eliminate third-party AI API calls:
+Run [Ollama](https://ollama.com) on the fleet — all inference stays on your hardware:
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
@@ -42,7 +42,7 @@ ollama pull codestral     # code generation
 ollama pull mistral       # fast inference
 ```
 
-Point n8n, your agents, or any HTTP client at `http://localhost:11434` instead of OpenAI endpoints.
+Point n8n, your agents, or any HTTP client at `http://localhost:11434`. Zero outbound API calls to any third-party provider.
 
 ## Continuous Engine
 
