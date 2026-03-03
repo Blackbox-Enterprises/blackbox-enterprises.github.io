@@ -13,8 +13,10 @@ on:
 jobs:
   perpetual-loop:
     name: 🔄 Loop (${{ github.event.inputs.chain_count || '0' }})
+    # Prefer self-hosted Pi fleet; fall back to ubuntu-latest when Pis are offline
     runs-on: [self-hosted, blackroad-fleet]
     timeout-minutes: 355  # 5h55m (under GitHub 6h limit)
+    continue-on-error: true
     steps:
       - name: 🧠 Agent heartbeat
         run: |
@@ -26,6 +28,21 @@ jobs:
           echo ""
           echo "🔴 LUCIDIA  | 🔵 ALICE | 🟢 OCTAVIA | 🟡 PRISM | 🟣 ECHO | ⚫ CIPHER"
           echo "Status: ALL AGENTS ONLINE"
+
+      - name: 🔵 Tailscale connectivity check
+        run: |
+          if command -v tailscale &>/dev/null; then
+            STATUS=$(tailscale status --json 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print('up' if d.get('BackendState')=='Running' else 'down')" 2>/dev/null || echo "unknown")
+            echo "Tailscale status: $STATUS"
+            if [ "$STATUS" = "up" ]; then
+              echo "✅ Tailscale mesh active"
+              tailscale status 2>/dev/null | head -20 || true
+            else
+              echo "⚠️ Tailscale not running — node isolated from mesh"
+            fi
+          else
+            echo "ℹ️ Tailscale not installed on this runner"
+          fi
 
       - name: 🏃 Run perpetual tasks
         run: |
@@ -64,6 +81,37 @@ jobs:
           NEXT=$(( ${{ github.event.inputs.chain_count || '0' }} + 1 ))
           echo "🔗 Chaining to iteration $NEXT in 3 seconds..."
           sleep 3
+          gh workflow run continuous-engine.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --field chain_count="$NEXT" 2>/dev/null \
+          && echo "✅ Chain $NEXT triggered" \
+          || echo "⚠️ Chain trigger failed (schedule will recover)"
+
+  # Cloud fallback — runs on ubuntu-latest when self-hosted fleet is unavailable
+  perpetual-loop-cloud-fallback:
+    name: ☁️ Cloud Fallback (ubuntu-latest)
+    runs-on: ubuntu-latest
+    needs: perpetual-loop
+    if: failure()
+    timeout-minutes: 30
+    permissions:
+      actions: write  # required to trigger the next workflow run
+    steps:
+      - name: 🧠 Agent heartbeat (cloud fallback)
+        run: |
+          COUNT="${{ github.event.inputs.chain_count || '0' }}"
+          echo "=== BlackRoad Cloud Fallback ==="
+          echo "Chain iteration: $COUNT"
+          echo "Runner: $(hostname) [ubuntu-latest]"
+          echo "Time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "NOTE: Self-hosted Pi fleet unavailable — running lightweight cloud iteration"
+
+      - name: 🔗 Self-chain — trigger next iteration
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NEXT=$(( ${{ github.event.inputs.chain_count || '0' }} + 1 ))
+          echo "🔗 Chaining to iteration $NEXT..."
           gh workflow run continuous-engine.yml \
             --repo "$GITHUB_REPOSITORY" \
             --field chain_count="$NEXT" 2>/dev/null \
