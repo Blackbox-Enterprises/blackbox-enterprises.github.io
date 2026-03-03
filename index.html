@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blackbox Enterprises — Automate Everything.</title>
-  <meta name="description" content="n8n, Airbyte, Prefect, Temporal — the full enterprise automation stack for teams that move fast.">
+  <meta name="description" content="n8n, Airbyte, Prefect, Temporal — the full enterprise automation stack for teams that move fast. Secured via Cloudflare Zero Trust.">
   <meta property="og:title" content="Blackbox Enterprises">
-  <meta property="og:description" content="n8n, Airbyte, Prefect, Temporal — the full enterprise automation stack for teams that move fast.">
+  <meta property="og:description" content="n8n, Airbyte, Prefect, Temporal — the full enterprise automation stack for teams that move fast. Secured via Cloudflare Zero Trust.">
   <meta property="og:url" content="https://github.com/Blackbox-Enterprises">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -311,9 +311,101 @@
       50% { transform: rotate(45deg) translateY(6px); }
     }
 
+    /* ── INFRA STATUS ─────────────────────────────────── */
+    .infra-section {
+      padding: 60px 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .infra-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .infra-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .infra-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .infra-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    }
+
+    .infra-card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .infra-card-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .infra-card-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-top: 12px;
+    }
+
+    .status-active {
+      background: rgba(34,197,94,0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+
+    .status-pending {
+      background: rgba(234,179,8,0.12);
+      color: #eab308;
+      border: 1px solid rgba(234,179,8,0.25);
+    }
+
+    .status-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
     @media (max-width: 600px) {
       .stats { flex-direction: column; }
       .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .infra-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -349,6 +441,7 @@
   <section class="tags-section">
     <div class="tags-wrap">
       <span class="tag">Workflow Automation</span><span class="tag">ETL</span><span class="tag">Orchestration</span><span class="tag">No-Code</span>
+      <span class="tag">Cloudflare Zero Trust</span><span class="tag">OAuth</span><span class="tag">Tailscale</span><span class="tag">Self-Hosted</span>
     </div>
   </section>
 
@@ -370,6 +463,42 @@
       <div class="stat-label">AI Cost Target</div>
     </div>
   </div>
+
+  <!-- Infrastructure Status -->
+  <section class="infra-section">
+    <div class="infra-title">Infrastructure &amp; Routing</div>
+    <div class="infra-grid">
+
+      <div class="infra-card">
+        <span class="infra-card-icon">🔒</span>
+        <div class="infra-card-name">Cloudflare Zero Trust</div>
+        <div class="infra-card-desc">OAuth authentication via Cloudflare Access. GitHub identity — only <strong>@blackboxprogramming</strong> allowed. No third-party AI gateways in the path.</div>
+        <span class="status-pill status-active"><span class="status-dot"></span>Active</span>
+      </div>
+
+      <div class="infra-card">
+        <span class="infra-card-icon">🌐</span>
+        <div class="infra-card-name">Cloudflare Tunnel</div>
+        <div class="infra-card-desc">All traffic routes through a <code>cloudflared</code> tunnel to your own infrastructure. When Pis are online, the tunnel runs there. Offline? Run it on any host.</div>
+        <span class="status-pill status-pending"><span class="status-dot"></span>Pis Offline — Tunnel Portable</span>
+      </div>
+
+      <div class="infra-card">
+        <span class="infra-card-icon">🔗</span>
+        <div class="infra-card-name">Tailscale Mesh</div>
+        <div class="infra-card-desc">Private WireGuard mesh for internal service-to-service routing. Re-enable when Pis are back. Cloudflare Tunnel bridges the gap in the meantime.</div>
+        <span class="status-pill status-pending"><span class="status-dot"></span>Pis Offline — Resume When Online</span>
+      </div>
+
+      <div class="infra-card">
+        <span class="infra-card-icon">🏠</span>
+        <div class="infra-card-name">Self-Hosted Routing</div>
+        <div class="infra-card-desc">Traffic path: <strong>Browser → Cloudflare Edge → Tunnel → Your Infra</strong>. No OpenAI, Anthropic, or third-party relays in the data path.</div>
+        <span class="status-pill status-active"><span class="status-dot"></span>Cloudflare Edge Active</span>
+      </div>
+
+    </div>
+  </section>
 
   <footer>
     <div class="footer-logo">
