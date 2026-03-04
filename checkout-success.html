@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — Blackbox Enterprises</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000; color: #fff;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem;
+    }
+    .card {
+      max-width: 480px; padding: 48px;
+      background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 16px;
+    }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+    p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 24px; }
+    a {
+      display: inline-block; padding: 12px 24px; background: #212121;
+      color: #fff; border-radius: 10px; text-decoration: none; font-weight: 600;
+    }
+    a:hover { transform: translateY(-1px); box-shadow: 0 4px 20px #21212150; }
+  </style>
+</head>
+<body>
+  <div class="card" data-testid="checkout-success">
+    <div class="icon">✅</div>
+    <h1>Payment Successful</h1>
+    <p>Welcome to Blackbox Enterprises. Your subscription is now active. You'll receive a confirmation email shortly.</p>
+    <a href="/">← Back to Home</a>
+  </div>
+</body>
+</html>

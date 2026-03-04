@@ -311,6 +311,121 @@
       50% { transform: rotate(45deg) translateY(6px); }
     }
 
+    /* ── PRICING ──────────────────────────────────────── */
+    .pricing {
+      padding: 80px 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pricing h2 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .pricing .subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 48px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .price-card {
+      background: #0a0a0a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: left;
+      transition: border-color 0.2s;
+    }
+
+    .price-card:hover { border-color: #21212160; }
+
+    .price-card.featured {
+      border-color: #212121;
+      box-shadow: 0 0 40px #21212120;
+    }
+
+    .price-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .price-card .price {
+      font-size: 36px;
+      font-weight: 800;
+      color: #212121;
+      margin-bottom: 4px;
+    }
+
+    .price-card .price span {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .price-card .features {
+      list-style: none;
+      margin: 20px 0 28px;
+    }
+
+    .price-card .features li {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .price-card .features li::before {
+      content: '✓ ';
+      color: #212121;
+      font-weight: 600;
+    }
+
+    .btn-checkout {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-checkout.primary {
+      background: #212121;
+      color: #fff;
+    }
+
+    .btn-checkout.primary:hover {
+      box-shadow: 0 4px 24px #21212150;
+      transform: translateY(-1px);
+    }
+
+    .btn-checkout.secondary {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn-checkout.secondary:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-1px);
+    }
+
     @media (max-width: 600px) {
       .stats { flex-direction: column; }
       .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -371,12 +486,50 @@
     </div>
   </div>
 
+  <section class="pricing" id="pricing">
+    <h2>Start Automating</h2>
+    <p class="subtitle">Enterprise-grade automation. No AI cost overhead.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Starter</h3>
+        <div class="price">$49<span>/mo</span></div>
+        <ul class="features">
+          <li>5 n8n workflows</li>
+          <li>Airbyte connectors (10)</li>
+          <li>Prefect orchestration</li>
+          <li>Community support</li>
+        </ul>
+        <button class="btn-checkout secondary" data-plan="starter" data-testid="checkout-starter" onclick="startCheckout('starter')">
+          Get Started
+        </button>
+      </div>
+      <div class="price-card featured">
+        <h3>Enterprise</h3>
+        <div class="price">$299<span>/mo</span></div>
+        <ul class="features">
+          <li>Unlimited workflows</li>
+          <li>All Airbyte connectors</li>
+          <li>Temporal + Prefect</li>
+          <li>Dedicated support</li>
+          <li>Custom integrations</li>
+        </ul>
+        <button class="btn-checkout primary" data-plan="enterprise" data-testid="checkout-enterprise" onclick="startCheckout('enterprise')">
+          Contact Sales
+        </button>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="footer-logo">
       <span>BlackRoad OS</span>, Inc.
     </div>
     <div class="footer-copy">© 2026 BlackRoad OS, Inc. All rights reserved. Proprietary — not open source.</div>
   </footer>
+
+  <!-- Stripe.js (loaded from Stripe CDN — required for PCI compliance) -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="stripe-config.js"></script>
 
 </body>
 </html>
